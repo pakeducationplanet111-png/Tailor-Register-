@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>درزی رجسٹر</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1d2a44">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<script>
+addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__ip=e;var b=document.getElementById("inst");if(b)b.hidden=false;});
+if("serviceWorker" in navigator)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#1d2a44;--tape:#f2c230;--bg:#f2f4f8;--card:#fff;--line:#d9dee8;--mute:#5d6b85;--bad:#b3261e}
@@ -62,7 +70,7 @@ setTimeout(function(){
 
 <!-- کسٹمرز -->
 <div id="app" hidden><div id="listView">
-  <header><h1>میرے کسٹمرز</h1><button id="out">لاگ آؤٹ</button></header>
+  <header><h1>میرے کسٹمرز</h1><button id="inst" hidden>ایپ انسٹال کریں</button><button id="out">لاگ آؤٹ</button></header>
   <main>
     <input id="q" type="search" placeholder="نام یا فون نمبر سے تلاش کریں">
     <div class="state" id="st"></div>
@@ -159,6 +167,8 @@ $("authGo").onclick = async () => {
   } catch (e) { $("authErr").textContent = authMsg(e.code); }
 };
 $("out").onclick = () => signOut(auth);
+if (window.__ip) $("inst").hidden = false;
+$("inst").onclick = async () => { const p = window.__ip; if (!p) return; p.prompt(); await p.userChoice; window.__ip = null; $("inst").hidden = true; };
 
 onAuthStateChanged(auth, u => {
   window.__ready = true; $("boot").hidden = true; closeDetail();
