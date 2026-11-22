@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>درزی رجسٹر</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2b3a8c">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<script>
+addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__ip=e;var b=document.getElementById("inst");if(b)b.hidden=false;});
+if("serviceWorker" in navigator)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1b2540;--tape:#f2b705;--bg:#eef2f8;--card:#fff;--line:#dde3ee;--mute:#5b6784;--bad:#d1431f;--p1:#2b3a8c;--p2:#0f9d8f;--phb:#dff5f1;--phc:#0a6f66;--adb:#e8ebfb;--adc:#2b3a8c;--rb:#f1e6f7;--rc:#6c2e8a;--sh:0 1px 4px rgba(27,37,64,.12);--vb:#fbefd6;--vc:#8a5a00}
+@media (prefers-color-scheme:dark){:root{--ink:#eaf0ff;--bg:#0f1626;--card:#18223a;--line:#27345a;--mute:#9fb0d3;--bad:#ff8a70;--phb:#12413f;--phc:#7be8dc;--adb:#222d63;--adc:#aebcff;--rb:#3a2450;--rc:#e0b6f5;--sh:0 1px 4px rgba(0,0,0,.4);--vb:#4a3410;--vc:#ffd98a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/2.1 "Jameel Noori Nastaleeq","Noto Nastaliq Urdu","Noto Naskh Arabic",Tahoma,serif}
+.tape{height:10px;background:repeating-linear-gradient(90deg,var(--tape) 0 14px,#1b2540 14px 16px)}
+header{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:10px 16px 20px;color:#fff;background:linear-gradient(135deg,var(--p1),var(--p2));border-radius:0 0 24px 24px}
+h1{margin:0;font-size:24px;line-height:2.2}
+h2{font-size:18px;margin:14px 0 4px;line-height:2.2}
+header button{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.45);color:#fff}
+main{max-width:640px;margin:0 auto;padding:12px 16px 100px}
+input,textarea,button{font:inherit;color:inherit}
+input,textarea{width:100%;padding:4px 12px;line-height:2;border:1.5px solid var(--line);border-radius:12px;background:var(--card);margin:2px 0 12px}
+textarea{padding:8px 12px}
+label{font-size:15px;color:var(--mute)}
+button{cursor:pointer;border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:2px 16px;line-height:2.1}
+button.main{background:var(--tape);color:#1b2540;border-color:var(--tape);font-weight:700}
+button.del{color:var(--bad);border-color:var(--bad)}
+:focus-visible{outline:3px solid var(--tape);outline-offset:2px}
+.box{max-width:390px;margin:36px 16px;padding:20px;background:var(--card);border:1px solid var(--line);border-top:6px solid var(--tape);border-radius:16px;box-shadow:var(--sh)}
+@media(min-width:440px){.box{margin:36px auto}}
+.err{color:var(--bad);min-height:1.6em}
+.row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:10px;cursor:pointer;box-shadow:var(--sh)}
+.av{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:20px;line-height:1}
+.tx{min-width:0;flex:1}
+.row b{display:block;font-size:19px;line-height:2.1}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips em,.chips a{font-style:normal;text-decoration:none;font-size:14px;line-height:2.1;padding:0 10px;border-radius:999px}
+.ph{background:var(--phb);color:var(--phc)}
+.ad{background:var(--adb);color:var(--adc)}
+.rel{background:var(--rb);color:var(--rc)}
+.fab{position:fixed;bottom:18px;inset-inline-start:18px;padding:6px 22px;box-shadow:0 3px 10px #0004;border-radius:999px}
+dialog{width:min(430px,94vw);max-height:92vh;overflow:auto;border:1px solid var(--line);border-radius:18px;background:var(--bg);color:var(--ink);padding:16px}
+dialog::backdrop{background:#0008}
+.btns{display:flex;gap:8px;justify-content:space-between}
+.state{font-size:14px;color:var(--mute);margin:6px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+h2.hs,h2.hp,h2.hm{padding-inline-start:10px;border-inline-start:5px solid var(--p1)}
+h2.hp{border-color:var(--p2)}
+h2.hm{border-color:var(--tape)}
+#dName{font-size:26px}
+#bk{margin-top:6px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:4px 0 8px}
+.tile{display:flex;flex-direction:column;align-items:center;padding:8px 4px 0;border-radius:14px;position:relative}
+.tile svg{width:42px;height:42px}
+.tile span{font-size:15px;line-height:2;color:var(--ink)}
+.tile[data-g=shirt]{color:var(--p1)}.tile[data-g=pant]{color:var(--p2)}.tile[data-g=vest]{color:#c27c0e}
+.tile.on{background:var(--adb);border-color:currentColor}
+.tile.has::after{content:"✓";position:absolute;top:0;inset-inline-start:8px;font-size:15px;line-height:1.8;color:#1a9d4a;font-weight:700}
+.g_shirt{background:var(--adb);color:var(--adc)}.g_pant{background:var(--phb);color:var(--phc)}.g_vest{background:var(--vb);color:var(--vc)}
+h2.hv{padding-inline-start:10px;border-inline-start:5px solid #c27c0e}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="tape"></div>
+
+<section id="boot" class="box"><h1>درزی رجسٹر</h1><p id="bootMsg" class="state">ایپ شروع ہو رہی ہے…</p></section>
+<script>
+setTimeout(function(){
+  if(!window.__ready){
+    document.getElementById("bootMsg").textContent="ایپ ابھی Firebase سے جڑی نہیں۔ یہ صفحہ یہاں پریویو میں نہیں چلے گا۔ اسے Firebase Hosting یا کسی ویب سائٹ پر رکھ کر کھولیں، اور فائل میں Firebase کی ترتیب (firebaseConfig) پیسٹ کریں۔";
+  }
+},3000);
+</script>
+
+<!-- لاگ اِن / اکاؤنٹ -->
+<section id="auth" class="box" hidden>
+  <h1 id="authTitle">لاگ اِن</h1>
+  <p class="state">اپنا ای میل اور پاسورڈ لکھیں۔ آپ کا ڈیٹا صرف آپ کو نظر آئے گا۔</p>
+  <label for="em">ای میل</label><input id="em" type="email" autocomplete="email" dir="ltr">
+  <label for="pw">پاسورڈ (کم از کم 6 حروف)</label><input id="pw" type="password" autocomplete="current-password" dir="ltr">
+  <button id="forgot" type="button" style="border:none;background:none;color:var(--mute);text-decoration:underline;padding:0 0 8px">پاسورڈ بھول گئے؟</button>
+  <div class="err" id="authErr" role="alert"></div>
+  <div class="btns">
+    <button class="main" id="authGo">لاگ اِن کریں</button>
+    <button id="authSwitch">نیا اکاؤنٹ بنائیں</button>
+  </div>
+</section>
+
+<!-- کسٹمرز -->
+<div id="app" hidden><div id="listView">
+  <header><h1>میرے کسٹمرز</h1><button id="inst" hidden>ایپ انسٹال کریں</button><button id="out">لاگ آؤٹ</button></header>
+  <main>
+    <input id="q" type="search" placeholder="نام یا فون نمبر سے تلاش کریں">
+    <div class="state" id="st"></div>
+    <div id="list"></div>
+    <div style="margin-top:18px"><button id="bk">ڈیٹا ڈاؤن لوڈ کریں (بیک اپ)</button><div class="state" id="bkst"></div></div>
+  </main>
+  <button class="main fab" id="add">نیا کسٹمر</button></div>
+  <div id="detailView" hidden>
+    <header><button id="back">← واپس</button><button id="editC">معلومات بدلیں</button></header>
+    <main>
+      <h1 id="dName"></h1><p class="state" id="dInfo"></p>
+      <h2 class="hm">فیملی ممبرز</h2>
+      <div class="state" id="mst"></div>
+      <div id="mlist"></div>
+    </main>
+    <button class="main fab" id="addM">نیا ممبر</button>
+  </div>
+</div>
+
+<dialog id="dlg">
+  <h1 id="dTitle">نیا کسٹمر</h1>
+  <label for="fn">نام</label><input id="fn" autocomplete="off">
+  <label for="fp">فون نمبر</label><input id="fp" type="tel" dir="ltr" autocomplete="off">
+  <label for="fa">ایڈریس</label><textarea id="fa" rows="3"></textarea>
+  <div class="err" id="fe" role="alert"></div>
+  <div class="btns">
+    <button class="main" id="save">محفوظ کریں</button>
+    <button id="cancel">بند کریں</button>
+    <button class="del" id="rm" hidden>حذف کریں</button>
+  </div>
+</dialog>
+
+<dialog id="mdlg">
+  <h1 id="mTitle">نیا ممبر</h1>
+  <label for="mn">نام</label><input id="mn" autocomplete="off">
+  <label for="mr">رشتہ (مثلاً بیٹا، بھائی)</label><input id="mr" autocomplete="off">
+  <h2 class="hm">کپڑے کی ناپ (آئیکن پر ٹیپ کریں)</h2>
+  <div class="tiles">
+    <button type="button" class="tile" data-g="shirt"><svg viewBox="0 0 48 48" fill="currentColor"><path d="M16 5 8 11 3 22l7 3 3-5v22h22V20l3 5 7-3-5-11-8-6c-2 5-14 5-16 0z"/></svg><span>قمیض</span></button>
+    <button type="button" class="tile" data-g="pant"><svg viewBox="0 0 48 48" fill="currentColor"><path d="M12 5h24l3 38H27l-3-21-3 21H9z"/></svg><span>شلوار</span></button>
+    <button type="button" class="tile" data-g="vest"><svg viewBox="0 0 48 48" fill="currentColor"><path d="M13 4l9 2 2 12 2-12 9-2 3 9v29H10V13z"/><circle cx="24" cy="26" r="1.8" fill="#fff"/><circle cx="24" cy="32" r="1.8" fill="#fff"/><circle cx="24" cy="38" r="1.8" fill="#fff"/></svg><span>واسکٹ</span></button>
+  </div>
+  <section class="gsec" id="g_shirt" hidden><h2 class="hs">قمیض کی ناپ (انچ)</h2><div class="grid" id="shirt"></div></section>
+  <section class="gsec" id="g_pant" hidden><h2 class="hp">شلوار کی ناپ (انچ)</h2><div class="grid" id="pant"></div></section>
+  <section class="gsec" id="g_vest" hidden><h2 class="hv">واسکٹ کی ناپ (انچ)</h2><div class="grid" id="vest"></div>
+    <label for="vnote">واسکٹ کا ڈیزائن / نوٹس</label><textarea id="vnote" rows="2"></textarea></section>
+  <label for="mnote">نوٹس</label><textarea id="mnote" rows="2"></textarea>
+  <div class="err" id="me" role="alert"></div>
+  <div class="btns">
+    <button class="main" id="msave">محفوظ کریں</button>
+    <button id="mcancel">بند کریں</button>
+    <button class="del" id="mrm" hidden>حذف کریں</button>
+  </div>
+</dialog>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,collection,doc,addDoc,setDoc,deleteDoc,onSnapshot,serverTimestamp,query,orderBy,limit,startAt,endAt,getDocs} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+/* ← یہاں اپنے Firebase پروجیکٹ کی ترتیب پیسٹ کریں */
+const firebaseConfig = {
+  apiKey: "AIzaSyBQ83zw7citlz8zvtiDvtnZtBl6zZfr0TE",
+  authDomain: "tailor-register-406bc.firebaseapp.com",
+  projectId: "tailor-register-406bc",
+  appId: "1:824109868080:web:82180839dcf73c5a71f9f5"
+};
+
+if (firebaseConfig.apiKey.startsWith("YOUR_")) {
+  document.getElementById("bootMsg").textContent = "Firebase کی ترتیب (firebaseConfig) ابھی فائل میں نہیں ڈالی گئی۔ پہلے اسے پیسٹ کریں۔";
+  window.__ready = true;
+  throw new Error("firebaseConfig missing");
+}
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = initializeFirestore(app, {localCache: persistentLocalCache({tabManager: persistentMultipleTabManager()})});
+const $ = id => document.getElementById(id);
+let uid = null, unsub = null, editId = null, signup = false, items = new Map(), curId = null, curData = {}, munsub = null, mEdit = null, mItems = new Map();
+
+const authMsg = c => ({
+  "auth/invalid-email":"ای میل درست نہیں ہے۔",
+  "auth/missing-password":"پاسورڈ لکھیں۔",
+  "auth/weak-password":"پاسورڈ کم از کم 6 حروف کا رکھیں۔",
+  "auth/email-already-in-use":"یہ ای میل پہلے سے استعمال میں ہے۔ لاگ اِن کریں۔",
+  "auth/invalid-credential":"ای میل یا پاسورڈ غلط ہے۔",
+  "auth/network-request-failed":"انٹرنیٹ نہیں ہے۔ لاگ اِن کے لیے انٹرنیٹ ضروری ہے۔"
+}[c] || "کچھ گڑبڑ ہوئی۔ دوبارہ کوشش کریں۔");
+
+function setMode(s){
+  signup = s;
+  $("authTitle").textContent = s ? "نیا اکاؤنٹ" : "لاگ اِن";
+  $("authGo").textContent = s ? "اکاؤنٹ بنائیں" : "لاگ اِن کریں";
+  $("authSwitch").textContent = s ? "پہلے سے اکاؤنٹ ہے؟ لاگ اِن" : "نیا اکاؤنٹ بنائیں";
+  $("pw").autocomplete = s ? "new-password" : "current-password";
+  $("authErr").textContent = "";
+}
+$("authSwitch").onclick = () => setMode(!signup);
+$("forgot").onclick = async () => {
+  const em = $("em").value.trim(), e = $("authErr");
+  e.style.color = "";
+  if (!em) { e.textContent = "پہلے اوپر اپنی ای میل لکھیں، پھر یہ بٹن دبائیں۔"; return; }
+  try {
+    await sendPasswordResetEmail(auth, em);
+    e.style.color = "var(--ink)";
+    e.textContent = "پاسورڈ بدلنے کا لنک آپ کی ای میل پر بھیج دیا گیا ہے۔ ان باکس اور اسپیم (Spam) دونوں دیکھیں۔";
+  } catch (x) { e.textContent = authMsg(x.code); }
+};
+$("authGo").onclick = async () => {
+  $("authErr").style.color = "";
+  $("authErr").textContent = "";
+  try {
+    const f = signup ? createUserWithEmailAndPassword : signInWithEmailAndPassword;
+    await f(auth, $("em").value.trim(), $("pw").value);
+  } catch (e) { $("authErr").textContent = authMsg(e.code); }
+};
+$("out").onclick = () => signOut(auth);
+if (window.__ip) $("inst").hidden = false;
+$("inst").onclick = async () => { const p = window.__ip; if (!p) return; p.prompt(); await p.userChoice; window.__ip = null; $("inst").hidden = true; };
+
+onAuthStateChanged(auth, u => {
+  window.__ready = true; $("boot").hidden = true; closeDetail();
+  uid = u ? u.uid : null;
+  $("auth").hidden = !!u;
+  $("app").hidden = !u;
+  if (unsub) { unsub(); unsub = null; }
+  if (u) { $("q").value = ""; load(); } else { $("list").innerHTML = ""; items.clear(); $("pw").value = ""; }
+});
+
+/* ہر ٹیلر کا ڈیٹا صرف اس کے اپنے راستے users/{uid}/customers میں جاتا ہے */
+const col = () => collection(db, "users", uid, "customers");
+
+function load(){
+  if (unsub) unsub();
+  const t = $("q").value.trim();
+  let q;
+  if (!t) q = query(col(), orderBy("createdAt","desc"), limit(40));
+  else {
+    const field = /^[\d+\s-]/.test(t) ? "phone" : "name";
+    q = query(col(), orderBy(field), startAt(t), endAt(t + "\uf8ff"), limit(40));
+  }
+  unsub = onSnapshot(q, snap => {
+    items.clear();
+    const list = $("list"); list.innerHTML = "";
+    snap.forEach(d => {
+      const c = d.data(); items.set(d.id, c);
+      const r = document.createElement("div"); r.className = "row"; r.tabIndex = 0;
+      const b = document.createElement("b"); b.textContent = c.name || "(بغیر نام)";
+      const s = document.createElement("span"); s.className = "chips"; if (c.phone) { const p = document.createElement("em"); p.className = "ph"; p.textContent = "📞 " + c.phone; s.append(p); } if (c.address) { const a = document.createElement("em"); a.className = "ad"; a.textContent = "📍 " + c.address; s.append(a); }
+      const tx = document.createElement("div"); tx.className = "tx"; tx.append(b, s); r.append(avatar(c.name), tx);
+      r.onclick = () => openDetail(d.id);
+      r.onkeydown = e => { if (e.key === "Enter") openDetail(d.id); };
+      list.append(r);
+    });
+    const n = snap.size;
+    $("st").textContent = n ? (t ? n + " نتائج" : "تازہ ترین کسٹمر") + (snap.metadata.fromCache ? " • آف لائن" : "") : (t ? "کوئی کسٹمر نہیں ملا۔" : "ابھی کوئی کسٹمر نہیں۔ \"نیا کسٹمر\" دبا کر شروع کریں۔");
+  }, () => { $("st").textContent = "ڈیٹا نہیں کھل سکا۔ انٹرنیٹ چیک کریں۔"; });
+}
+let tm; $("q").oninput = () => { clearTimeout(tm); tm = setTimeout(load, 300); };
+
+function openForm(id){
+  editId = id || null;
+  const c = id ? (items.get(id) || (id === curId ? curData : {})) : {};
+  $("dTitle").textContent = id ? "کسٹمر کی معلومات" : "نیا کسٹمر";
+  $("fn").value = c.name || ""; $("fp").value = c.phone || ""; $("fa").value = c.address || "";
+  $("rm").hidden = !id; $("fe").textContent = "";
+  $("dlg").showModal(); $("fn").focus();
+}
+$("add").onclick = () => openForm();
+$("cancel").onclick = () => $("dlg").close();
+$("save").onclick = async () => {
+  const name = $("fn").value.trim();
+  if (!name) { $("fe").textContent = "نام لکھنا ضروری ہے۔"; return; }
+  const data = {name, phone: $("fp").value.trim(), address: $("fa").value.trim()};
+  if (editId && editId === curId) { curData = data; showHead(data); }
+  $("dlg").close();
+  /* آف لائن ہو تو بھی محفوظ ہو جاتا ہے اور انٹرنیٹ آنے پر خود سنک ہوتا ہے */
+  try {
+    if (editId) await setDoc(doc(col(), editId), data, {merge: true});
+    else await addDoc(col(), {...data, createdAt: serverTimestamp()});
+  } catch (e) { $("st").textContent = "محفوظ نہیں ہو سکا۔ دوبارہ کوشش کریں۔"; }
+};
+$("rm").onclick = async () => {
+  if (!editId || !confirm("کیا آپ واقعی یہ کسٹمر حذف کرنا چاہتے ہیں؟")) return;
+  const id = editId; $("dlg").close();
+  if (id === curId) closeDetail();
+  try { const ms = await getDocs(collection(db, "users", uid, "customers", id, "members")); await Promise.all(ms.docs.map(m => deleteDoc(m.ref))); } catch (e) {}
+  try { await deleteDoc(doc(col(), id)); } catch (e) { $("st").textContent = "حذف نہیں ہو سکا۔"; }
+};
+
+/* ===== مرحلہ 3: فیملی ممبرز اور ناپ ===== */
+const SHIRT=[["len","لمبائی"],["chest","چھاتی"],["waist","کمر"],["hem","گھیرا"],["shoulder","کندھا"],["sleeve","آستین"],["neck","گلا"]];
+const PANT=[["len","لمبائی"],["bottom","پائنچہ"],["hem","گھیرا"],["waist","کمر"]];
+const VEST=[["len","لمبائی"],["chest","چھاتی"],["waist","کمر"],["hem","گھیرا"],["shoulder","کندھا"],["neck","گلا"],["armhole","بغل"]];
+function buildGrid(el,arr,p){arr.forEach(([k,l])=>{const w=document.createElement("div"),lb=document.createElement("label"),i=document.createElement("input");lb.textContent=l;lb.htmlFor=p+k;i.id=p+k;i.setAttribute("inputmode","decimal");i.dir="ltr";i.autocomplete="off";w.append(lb,i);el.append(w);});}
+buildGrid($("shirt"),SHIRT,"s_");buildGrid($("pant"),PANT,"p_");buildGrid($("vest"),VEST,"v_");
+const mcol=()=>collection(db,"users",uid,"customers",curId,"members");
+function showHead(c){$("dName").textContent=c.name||"";const i=$("dInfo");i.innerHTML="";i.className="chips";if(c.phone){const p=document.createElement("a");p.className="ph";p.href="tel:"+c.phone;p.textContent="📞 "+c.phone;i.append(p);}if(c.address){const a=document.createElement("em");a.className="ad";a.textContent="📍 "+c.address;i.append(a);}}
+function closeDetail(){if(munsub){munsub();munsub=null;}curId=null;mItems.clear();$("detailView").hidden=true;$("listView").hidden=false;}
+function openDetail(id){
+  curId=id;curData=items.get(id)||{};showHead(curData);
+  $("listView").hidden=true;$("detailView").hidden=false;window.scrollTo(0,0);
+  if(munsub)munsub();
+  munsub=onSnapshot(query(mcol(),orderBy("createdAt")),snap=>{
+    mItems.clear();const l=$("mlist");l.innerHTML="";
+    snap.forEach(d=>{const m=d.data();mItems.set(d.id,m);
+      const r=document.createElement("div");r.className="row";r.tabIndex=0;
+      const b=document.createElement("b");b.textContent=m.name||"(بغیر نام)";
+      const s=document.createElement("span");s.className="chips";if(m.relation){const q=document.createElement("em");q.className="rel";q.textContent=m.relation;s.append(q);}[["shirt","قمیض"],["pant","شلوار"],["vest","واسکٹ"]].forEach(([g,l])=>{if(m[g]&&Object.keys(m[g]).length){const z=document.createElement("em");z.className="g_"+g;z.textContent="✓ "+l;s.append(z);}});
+      const tx=document.createElement("div");tx.className="tx";tx.append(b,s);r.append(avatar(m.name),tx);r.onclick=()=>openM(d.id);r.onkeydown=e=>{if(e.key==="Enter")openM(d.id);};l.append(r);});
+    $("mst").textContent=snap.size?"":"ابھی کوئی ممبر نہیں۔ \"نیا ممبر\" دبا کر شامل کریں۔";
+  },()=>{$("mst").textContent="ممبرز نہیں کھل سکے۔ انٹرنیٹ چیک کریں۔";});
+}
+$("back").onclick=closeDetail;
+$("editC").onclick=()=>openForm(curId);
+function openM(id){
+  mEdit=id||null;const m=id?mItems.get(id):{};
+  $("mTitle").textContent=id?"ممبر کی معلومات":"نیا ممبر";
+  $("mn").value=m.name||"";$("mr").value=m.relation||"";$("mnote").value=m.note||"";
+  SHIRT.forEach(([k])=>$("s_"+k).value=(m.shirt||{})[k]||"");
+  PANT.forEach(([k])=>$("p_"+k).value=(m.pant||{})[k]||"");
+  VEST.forEach(([k])=>$("v_"+k).value=(m.vest||{})[k]||"");$("vnote").value=m.vestNote||"";openTiles(m);
+  $("mrm").hidden=!id;$("me").textContent="";$("mdlg").showModal();$("mn").focus();
+}
+$("addM").onclick=()=>openM();
+$("mcancel").onclick=()=>$("mdlg").close();
+$("msave").onclick=async()=>{
+  const name=$("mn").value.trim();
+  if(!name){$("me").textContent="نام لکھنا ضروری ہے۔";return;}
+  const g=(a,p)=>Object.fromEntries(a.map(([k])=>[k,$(p+k).value.trim()]).filter(([,v])=>v));
+  const data={name,relation:$("mr").value.trim(),shirt:g(SHIRT,"s_"),pant:g(PANT,"p_"),vest:g(VEST,"v_"),vestNote:$("vnote").value.trim(),note:$("mnote").value.trim()};
+  $("mdlg").close();
+  try{
+    if(mEdit)await setDoc(doc(mcol(),mEdit),{...data,createdAt:(mItems.get(mEdit)||{}).createdAt||serverTimestamp()});
+    else await addDoc(mcol(),{...data,createdAt:serverTimestamp()});
+  }catch(e){$("mst").textContent="محفوظ نہیں ہو سکا۔ دوبارہ کوشش کریں۔";}
+};
+$("mrm").onclick=async()=>{
+  if(!mEdit||!confirm("کیا آپ واقعی یہ ممبر حذف کرنا چاہتے ہیں؟"))return;
+  const id=mEdit;$("mdlg").close();
+  try{await deleteDoc(doc(mcol(),id));}catch(e){$("mst").textContent="حذف نہیں ہو سکا۔";}
+};
+
+/* ===== بیک اپ: سارا ڈیٹا ایک ایکسل/CSV فائل میں ===== */
+$("bk").onclick = async () => {
+  if (!uid) return;
+  const st = $("bkst"); $("bk").disabled = true; st.textContent = "ڈیٹا جمع ہو رہا ہے، انتظار کریں…";
+  try {
+    const docs = (await getDocs(query(col(), orderBy("name")))).docs;
+    const rows = []; let done = 0;
+    for (let i = 0; i < docs.length; i += 20) {
+      const part = docs.slice(i, i + 20);
+      const ms = await Promise.all(part.map(c => getDocs(collection(db, "users", uid, "customers", c.id, "members"))));
+      part.forEach((c, j) => {
+        const cd = c.data(), mm = ms[j].docs, base = [cd.name, cd.phone, cd.address];
+        if (!mm.length) rows.push([...base, "", "", ...SHIRT.map(() => ""), ...PANT.map(() => ""), ...VEST.map(() => ""), "", ""]);
+        mm.forEach(m => { const x = m.data(); rows.push([...base, x.name, x.relation, ...SHIRT.map(([k]) => (x.shirt || {})[k] || ""), ...PANT.map(([k]) => (x.pant || {})[k] || ""), ...VEST.map(([k]) => (x.vest || {})[k] || ""), x.vestNote || "", x.note || ""]); });
+      });
+      done += part.length; st.textContent = done + " / " + docs.length + " کسٹمرز…";
+    }
+    const head = ["کسٹمر", "فون", "ایڈریس", "ممبر", "رشتہ", ...SHIRT.map(([, l]) => "قمیض " + l), ...PANT.map(([, l]) => "شلوار " + l), ...VEST.map(([, l]) => "واسکٹ " + l), "واسکٹ نوٹس", "نوٹس"];
+    const esc = v => '"' + String(v ?? "").replace(/"/g, '""') + '"';
+    const csv = "\ufeff" + [head, ...rows].map(r => r.map(esc).join(",")).join("\r\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], {type: "text/csv;charset=utf-8"}));
+    a.download = "darzi-register-backup-" + new Date().toISOString().slice(0, 10) + ".csv";
+    document.body.append(a); a.click(); a.remove();
+    st.textContent = "فائل ڈاؤن لوڈ ہو گئی۔ کل کسٹمرز: " + docs.length;
+  } catch (e) { st.textContent = "بیک اپ نہیں بن سکا۔ انٹرنیٹ چیک کریں اور دوبارہ کوشش کریں۔"; }
+  $("bk").disabled = false;
+};
+
+/* ===== رنگین اوتار (Avatar) ===== */
+const AV=["#2b3a8c","#0f9d8f","#d1431f","#8e44ad","#c27c0e","#1f78b4"];
+function avatar(n){const d=document.createElement("div");d.className="av";const t=(n||"?").trim();d.textContent=([...t][0]||"?").toUpperCase();let h=0;for(const ch of t)h=(h*31+ch.codePointAt(0))%997;d.style.background=AV[h%AV.length];return d;}
+
+/* ===== قمیض / شلوار / واسکٹ کے آئیکن ===== */
+function openTiles(m){["shirt","pant","vest"].forEach(g=>{const has=Object.keys(m[g]||{}).length>0;$("g_"+g).hidden=!has;const t=document.querySelector('.tile[data-g="'+g+'"]');t.classList.toggle("on",has);t.classList.toggle("has",has);});}
+document.querySelectorAll(".tile").forEach(t=>{t.onclick=()=>{const sec=$("g_"+t.dataset.g);sec.hidden=!sec.hidden;t.classList.toggle("on",!sec.hidden);if(!sec.hidden){const i=sec.querySelector("input");if(i)i.focus();}};});
+</script>
+</body>
+</html>
