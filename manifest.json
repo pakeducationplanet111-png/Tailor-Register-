@@ -1,9 +1,8 @@
 {
- "name": "درزی رجسٹر",
- "short_name": "درزی رجسٹر",
- "description": "ٹیلر ماسٹر کے لیے کسٹمر اور ناپ کا رجسٹر",
- "lang": "ur",
- "dir": "rtl",
+ "name": "Tailor Register",
+ "short_name": "Tailor Register",
+ "description": "Customer and measurement register for tailors",
+ "lang": "en",
  "start_url": "./",
  "scope": "./",
  "display": "standalone",
