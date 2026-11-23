@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>درزی رجسٹر</title>
+<title>Tailor Register</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2b3a8c">
 <link rel="icon" href="icon-192.png">
@@ -12,7 +12,7 @@
 addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__ip=e;var b=document.getElementById("inst");if(b)b.hidden=false;});
 if("serviceWorker" in navigator)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#1b2540;--tape:#f2b705;--bg:#eef2f8;--card:#fff;--line:#dde3ee;--mute:#5b6784;--bad:#d1431f;--p1:#2b3a8c;--p2:#0f9d8f;--phb:#dff5f1;--phc:#0a6f66;--adb:#e8ebfb;--adc:#2b3a8c;--rb:#f1e6f7;--rc:#6c2e8a;--sh:0 1px 4px rgba(27,37,64,.12);--vb:#fbefd6;--vc:#8a5a00}
 @media (prefers-color-scheme:dark){:root{--ink:#eaf0ff;--bg:#0f1626;--card:#18223a;--line:#27345a;--mute:#9fb0d3;--bad:#ff8a70;--phb:#12413f;--phc:#7be8dc;--adb:#222d63;--adc:#aebcff;--rb:#3a2450;--rc:#e0b6f5;--sh:0 1px 4px rgba(0,0,0,.4);--vb:#4a3410;--vc:#ffd98a}}
@@ -63,14 +63,48 @@ h2.hm{border-color:var(--tape)}
 .tile.on{background:var(--adb);border-color:currentColor}
 .tile.has::after{content:"✓";position:absolute;top:0;inset-inline-start:8px;font-size:15px;line-height:1.8;color:#1a9d4a;font-weight:700}
 .g_shirt{background:var(--adb);color:var(--adc)}.g_pant{background:var(--phb);color:var(--phc)}.g_vest{background:var(--vb);color:var(--vc)}
+.seg{display:flex;gap:8px;margin:4px 0 12px}.seg button{flex:1}.seg button.on{background:var(--p1);color:#fff;border-color:var(--p1)}
+.opts{margin:6px 0 10px}.orow{margin-bottom:6px}.ochips{display:flex;flex-wrap:wrap;gap:6px}
+.oc{padding:0 12px;font-size:15px;line-height:2;border-radius:999px}.oc.sel{background:var(--p1);color:#fff;border-color:var(--p1)}
+#toFam{margin:4px 0 10px;color:var(--p1);border-color:var(--p1)}
 h2.hv{padding-inline-start:10px;border-inline-start:5px solid #c27c0e}
+body{font:15px/2 "Roboto","Segoe UI",Arial,"Jameel Noori Nastaleeq","Noto Nastaliq Urdu",sans-serif}
+h1{font-size:20px;line-height:2.1}h2{font-size:16px;line-height:2.1}
+header{padding:8px 16px 16px}header button{font-size:14px}
+input,textarea{font-size:15px}label{font-size:13px}button{font-size:14px}button.main{font-weight:600}
+.row{padding:8px 12px;gap:10px;border-radius:14px}
+.row b{font-size:16px;line-height:2;font-weight:600}
+.chips em,.chips a{font-size:13px;line-height:2;unicode-bidi:plaintext}
+.av{width:40px;height:40px;font-size:16px}
+.av.sb{width:auto;min-width:56px;padding:0 10px;border-radius:12px;font-size:15px;font-weight:700;background:linear-gradient(135deg,var(--p1),var(--p2))}
+.av.pi{background:var(--adb);font-size:18px}
+#dName{font-size:21px}.state{font-size:13px}.tile span,.oc{font-size:13px}
+.sn{background:var(--tape);color:#1b2540;font-weight:700}
+body{font:14.5px/1.7 "Roboto","Noto Sans Arabic","Segoe UI",Arial,sans-serif}
+h1{font-size:19px;line-height:1.7;font-weight:600}
+h2{font-size:15px;line-height:1.7;font-weight:600;margin:12px 0 4px}
+header{padding:8px 16px 14px}
+header button,button{font-size:13.5px;line-height:1.6;padding:6px 14px;min-height:38px}
+input,textarea{font-size:14.5px;line-height:1.6;padding:6px 12px;min-height:42px;margin:2px 0 10px}
+textarea{min-height:0}
+label{font-size:12.5px;line-height:1.7}
+.row{padding:8px 12px}
+.row b{font-size:15.5px;line-height:1.7;font-weight:600}
+.chips em,.chips a{font-size:12.5px;line-height:1.8}
+.oc{font-size:13px;line-height:1.6;padding:2px 12px;min-height:0}
+.tile{padding:8px 4px 4px}.tile span{font-size:13px;line-height:1.7}
+.av.sb{font-size:14px}
+#dName{font-size:20px;line-height:1.7}
+.state{font-size:13px;line-height:1.7}
+.fab{padding:8px 22px;font-size:14px}
+button.main{font-weight:600}
 [hidden]{display:none!important}
 </style>
 </head>
 <body>
 <div class="tape"></div>
 
-<section id="boot" class="box"><h1>درزی رجسٹر</h1><p id="bootMsg" class="state">ایپ شروع ہو رہی ہے…</p></section>
+<section id="boot" class="box"><h1>Tailor Register</h1><p id="bootMsg" class="state">ایپ شروع ہو رہی ہے…</p></section>
 <script>
 setTimeout(function(){
   if(!window.__ready){
@@ -97,7 +131,7 @@ setTimeout(function(){
 <div id="app" hidden><div id="listView">
   <header><h1>میرے کسٹمرز</h1><button id="inst" hidden>ایپ انسٹال کریں</button><button id="out">لاگ آؤٹ</button></header>
   <main>
-    <input id="q" type="search" placeholder="نام یا فون نمبر سے تلاش کریں">
+    <input id="q" type="search" placeholder="نام، فون یا # سیریل نمبر سے تلاش کریں">
     <div class="state" id="st"></div>
     <div id="list"></div>
     <div style="margin-top:18px"><button id="bk">ڈیٹا ڈاؤن لوڈ کریں (بیک اپ)</button><div class="state" id="bkst"></div></div>
@@ -107,8 +141,9 @@ setTimeout(function(){
     <header><button id="back">← واپس</button><button id="editC">معلومات بدلیں</button></header>
     <main>
       <h1 id="dName"></h1><p class="state" id="dInfo"></p>
-      <h2 class="hm">فیملی ممبرز</h2>
+      <h2 class="hm" id="mh">فیملی ممبرز</h2>
       <div class="state" id="mst"></div>
+      <button id="toFam" hidden>+ فیملی کے دوسرے افراد بھی شامل کریں</button>
       <div id="mlist"></div>
     </main>
     <button class="main fab" id="addM">نیا ممبر</button>
@@ -117,6 +152,7 @@ setTimeout(function(){
 
 <dialog id="dlg">
   <h1 id="dTitle">نیا کسٹمر</h1>
+  <div id="ctypeWrap"><label>کسٹمر کی قسم</label><div class="seg" id="ctype"><button type="button" data-t="single" class="on">ایک فرد (اکیلا)</button><button type="button" data-t="family">فیملی (کئی افراد)</button></div></div>
   <label for="fn">نام</label><input id="fn" autocomplete="off">
   <label for="fp">فون نمبر</label><input id="fp" type="tel" dir="ltr" autocomplete="off">
   <label for="fa">ایڈریس</label><textarea id="fa" rows="3"></textarea>
@@ -154,7 +190,7 @@ setTimeout(function(){
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import {getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,collection,doc,addDoc,setDoc,deleteDoc,onSnapshot,serverTimestamp,query,orderBy,limit,startAt,endAt,getDocs} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,collection,doc,addDoc,setDoc,deleteDoc,onSnapshot,serverTimestamp,query,orderBy,limit,startAt,endAt,getDocs,where,runTransaction} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 /* ← یہاں اپنے Firebase پروجیکٹ کی ترتیب پیسٹ کریں */
 const firebaseConfig = {
@@ -234,7 +270,7 @@ function load(){
   if (!t) q = query(col(), orderBy("createdAt","desc"), limit(40));
   else {
     const field = /^[\d+\s-]/.test(t) ? "phone" : "name";
-    q = query(col(), orderBy(field), startAt(t), endAt(t + "\uf8ff"), limit(40));
+    q = t[0] === "#" ? query(col(), where("serial", "==", parseInt(t.slice(1), 10) || -1), limit(5)) : query(col(), orderBy(field), startAt(t), endAt(t + "\uf8ff"), limit(40));
   }
   unsub = onSnapshot(q, snap => {
     items.clear();
@@ -244,12 +280,12 @@ function load(){
       const r = document.createElement("div"); r.className = "row"; r.tabIndex = 0;
       const b = document.createElement("b"); b.textContent = c.name || "(بغیر نام)";
       const s = document.createElement("span"); s.className = "chips"; if (c.phone) { const p = document.createElement("em"); p.className = "ph"; p.textContent = "📞 " + c.phone; s.append(p); } if (c.address) { const a = document.createElement("em"); a.className = "ad"; a.textContent = "📍 " + c.address; s.append(a); }
-      const tx = document.createElement("div"); tx.className = "tx"; tx.append(b, s); r.append(avatar(c.name), tx);
+      const tx = document.createElement("div"); tx.className = "tx"; tx.append(b); r.append(serialBadge(c.serial), tx);
       r.onclick = () => openDetail(d.id);
       r.onkeydown = e => { if (e.key === "Enter") openDetail(d.id); };
       list.append(r);
     });
-    const n = snap.size;
+    fixSerials(snap.docs); const n = snap.size;
     $("st").textContent = n ? (t ? n + " نتائج" : "تازہ ترین کسٹمر") + (snap.metadata.fromCache ? " • آف لائن" : "") : (t ? "کوئی کسٹمر نہیں ملا۔" : "ابھی کوئی کسٹمر نہیں۔ \"نیا کسٹمر\" دبا کر شروع کریں۔");
   }, () => { $("st").textContent = "ڈیٹا نہیں کھل سکا۔ انٹرنیٹ چیک کریں۔"; });
 }
@@ -260,7 +296,7 @@ function openForm(id){
   const c = id ? (items.get(id) || (id === curId ? curData : {})) : {};
   $("dTitle").textContent = id ? "کسٹمر کی معلومات" : "نیا کسٹمر";
   $("fn").value = c.name || ""; $("fp").value = c.phone || ""; $("fa").value = c.address || "";
-  $("rm").hidden = !id; $("fe").textContent = "";
+  $("rm").hidden = !id; $("fe").textContent = ""; setCType(id ? (c.type || "family") : "single"); $("ctypeWrap").hidden = !!id;
   $("dlg").showModal(); $("fn").focus();
 }
 $("add").onclick = () => openForm();
@@ -269,12 +305,12 @@ $("save").onclick = async () => {
   const name = $("fn").value.trim();
   if (!name) { $("fe").textContent = "نام لکھنا ضروری ہے۔"; return; }
   const data = {name, phone: $("fp").value.trim(), address: $("fa").value.trim()};
-  if (editId && editId === curId) { curData = data; showHead(data); }
+  if (editId && editId === curId) { curData = {...curData, ...data}; showHead(curData); }
   $("dlg").close();
   /* آف لائن ہو تو بھی محفوظ ہو جاتا ہے اور انٹرنیٹ آنے پر خود سنک ہوتا ہے */
   try {
     if (editId) await setDoc(doc(col(), editId), data, {merge: true});
-    else await addDoc(col(), {...data, createdAt: serverTimestamp()});
+    else { const ref = doc(col()); const serial = await getSerial(); const ops = [setDoc(ref, {...data, type: cType, serial, createdAt: serverTimestamp()})]; if (cType === "single") ops.push(setDoc(doc(collection(db, "users", uid, "customers", ref.id, "members")), {name, relation: "خود", createdAt: serverTimestamp()})); await Promise.all(ops); }
   } catch (e) { $("st").textContent = "محفوظ نہیں ہو سکا۔ دوبارہ کوشش کریں۔"; }
 };
 $("rm").onclick = async () => {
@@ -292,10 +328,10 @@ const VEST=[["len","لمبائی"],["chest","چھاتی"],["waist","کمر"],["h
 function buildGrid(el,arr,p){arr.forEach(([k,l])=>{const w=document.createElement("div"),lb=document.createElement("label"),i=document.createElement("input");lb.textContent=l;lb.htmlFor=p+k;i.id=p+k;i.setAttribute("inputmode","decimal");i.dir="ltr";i.autocomplete="off";w.append(lb,i);el.append(w);});}
 buildGrid($("shirt"),SHIRT,"s_");buildGrid($("pant"),PANT,"p_");buildGrid($("vest"),VEST,"v_");
 const mcol=()=>collection(db,"users",uid,"customers",curId,"members");
-function showHead(c){$("dName").textContent=c.name||"";const i=$("dInfo");i.innerHTML="";i.className="chips";if(c.phone){const p=document.createElement("a");p.className="ph";p.href="tel:"+c.phone;p.textContent="📞 "+c.phone;i.append(p);}if(c.address){const a=document.createElement("em");a.className="ad";a.textContent="📍 "+c.address;i.append(a);}}
+function showHead(c){$("dName").textContent=c.name||"";const i=$("dInfo");i.innerHTML="";i.className="chips";if(c.serial){const z=document.createElement("em");z.className="sn";z.textContent="سیریل نمبر "+c.serial;i.append(z);}if(c.phone){const p=document.createElement("a");p.className="ph";p.href="tel:"+c.phone;p.textContent="📞 "+c.phone;i.append(p);}if(c.address){const a=document.createElement("em");a.className="ad";a.textContent="📍 "+c.address;i.append(a);}}
 function closeDetail(){if(munsub){munsub();munsub=null;}curId=null;mItems.clear();$("detailView").hidden=true;$("listView").hidden=false;}
 function openDetail(id){
-  curId=id;curData=items.get(id)||{};showHead(curData);
+  curId=id;curData=items.get(id)||{};showHead(curData);applyType();
   $("listView").hidden=true;$("detailView").hidden=false;window.scrollTo(0,0);
   if(munsub)munsub();
   munsub=onSnapshot(query(mcol(),orderBy("createdAt")),snap=>{
@@ -304,7 +340,7 @@ function openDetail(id){
       const r=document.createElement("div");r.className="row";r.tabIndex=0;
       const b=document.createElement("b");b.textContent=m.name||"(بغیر نام)";
       const s=document.createElement("span");s.className="chips";if(m.relation){const q=document.createElement("em");q.className="rel";q.textContent=m.relation;s.append(q);}[["shirt","قمیض"],["pant","شلوار"],["vest","واسکٹ"]].forEach(([g,l])=>{if(m[g]&&Object.keys(m[g]).length){const z=document.createElement("em");z.className="g_"+g;z.textContent="✓ "+l;s.append(z);}});
-      const tx=document.createElement("div");tx.className="tx";tx.append(b,s);r.append(avatar(m.name),tx);r.onclick=()=>openM(d.id);r.onkeydown=e=>{if(e.key==="Enter")openM(d.id);};l.append(r);});
+      const tx=document.createElement("div");tx.className="tx";tx.append(b,s);r.append(personIcon(),tx);r.onclick=()=>openM(d.id);r.onkeydown=e=>{if(e.key==="Enter")openM(d.id);};l.append(r);});
     $("mst").textContent=snap.size?"":"ابھی کوئی ممبر نہیں۔ \"نیا ممبر\" دبا کر شامل کریں۔";
   },()=>{$("mst").textContent="ممبرز نہیں کھل سکے۔ انٹرنیٹ چیک کریں۔";});
 }
@@ -325,7 +361,7 @@ $("msave").onclick=async()=>{
   const name=$("mn").value.trim();
   if(!name){$("me").textContent="نام لکھنا ضروری ہے۔";return;}
   const g=(a,p)=>Object.fromEntries(a.map(([k])=>[k,$(p+k).value.trim()]).filter(([,v])=>v));
-  const data={name,relation:$("mr").value.trim(),shirt:g(SHIRT,"s_"),pant:g(PANT,"p_"),vest:g(VEST,"v_"),vestNote:$("vnote").value.trim(),note:$("mnote").value.trim()};
+  const data={name,relation:$("mr").value.trim(),shirt:g(SHIRT,"s_"),pant:g(PANT,"p_"),vest:g(VEST,"v_"),opts:{shirt:getOpts("shirt"),pant:getOpts("pant"),vest:getOpts("vest")},vestNote:$("vnote").value.trim(),note:$("mnote").value.trim()};
   $("mdlg").close();
   try{
     if(mEdit)await setDoc(doc(mcol(),mEdit),{...data,createdAt:(mItems.get(mEdit)||{}).createdAt||serverTimestamp()});
@@ -350,12 +386,12 @@ $("bk").onclick = async () => {
       const ms = await Promise.all(part.map(c => getDocs(collection(db, "users", uid, "customers", c.id, "members"))));
       part.forEach((c, j) => {
         const cd = c.data(), mm = ms[j].docs, base = [cd.name, cd.phone, cd.address];
-        if (!mm.length) rows.push([...base, "", "", ...SHIRT.map(() => ""), ...PANT.map(() => ""), ...VEST.map(() => ""), "", ""]);
-        mm.forEach(m => { const x = m.data(); rows.push([...base, x.name, x.relation, ...SHIRT.map(([k]) => (x.shirt || {})[k] || ""), ...PANT.map(([k]) => (x.pant || {})[k] || ""), ...VEST.map(([k]) => (x.vest || {})[k] || ""), x.vestNote || "", x.note || ""]); });
+        if (!mm.length) rows.push([...base, "", "", ...SHIRT.map(() => ""), ...PANT.map(() => ""), ...VEST.map(() => ""), "", "", ""]);
+        mm.forEach(m => { const x = m.data(); rows.push([...base, x.name, x.relation, ...SHIRT.map(([k]) => (x.shirt || {})[k] || ""), ...PANT.map(([k]) => (x.pant || {})[k] || ""), ...VEST.map(([k]) => (x.vest || {})[k] || ""), x.vestNote || "", dsg(x), x.note || ""]); });
       });
       done += part.length; st.textContent = done + " / " + docs.length + " کسٹمرز…";
     }
-    const head = ["کسٹمر", "فون", "ایڈریس", "ممبر", "رشتہ", ...SHIRT.map(([, l]) => "قمیض " + l), ...PANT.map(([, l]) => "شلوار " + l), ...VEST.map(([, l]) => "واسکٹ " + l), "واسکٹ نوٹس", "نوٹس"];
+    const head = ["کسٹمر", "فون", "ایڈریس", "ممبر", "رشتہ", ...SHIRT.map(([, l]) => "قمیض " + l), ...PANT.map(([, l]) => "شلوار " + l), ...VEST.map(([, l]) => "واسکٹ " + l), "واسکٹ نوٹس", "ڈیزائن", "نوٹس"];
     const esc = v => '"' + String(v ?? "").replace(/"/g, '""') + '"';
     const csv = "\ufeff" + [head, ...rows].map(r => r.map(esc).join(",")).join("\r\n");
     const a = document.createElement("a");
@@ -372,8 +408,56 @@ const AV=["#2b3a8c","#0f9d8f","#d1431f","#8e44ad","#c27c0e","#1f78b4"];
 function avatar(n){const d=document.createElement("div");d.className="av";const t=(n||"?").trim();d.textContent=([...t][0]||"?").toUpperCase();let h=0;for(const ch of t)h=(h*31+ch.codePointAt(0))%997;d.style.background=AV[h%AV.length];return d;}
 
 /* ===== قمیض / شلوار / واسکٹ کے آئیکن ===== */
-function openTiles(m){["shirt","pant","vest"].forEach(g=>{const has=Object.keys(m[g]||{}).length>0;$("g_"+g).hidden=!has;const t=document.querySelector('.tile[data-g="'+g+'"]');t.classList.toggle("on",has);t.classList.toggle("has",has);});}
+function openTiles(m){setOpts(m.opts||{});["shirt","pant","vest"].forEach(g=>{const has=Object.keys(m[g]||{}).length>0||Object.keys((m.opts||{})[g]||{}).length>0;$("g_"+g).hidden=!has;const t=document.querySelector('.tile[data-g="'+g+'"]');t.classList.toggle("on",has);t.classList.toggle("has",has);});}
 document.querySelectorAll(".tile").forEach(t=>{t.onclick=()=>{const sec=$("g_"+t.dataset.g);sec.hidden=!sec.hidden;t.classList.toggle("on",!sec.hidden);if(!sec.hidden){const i=sec.querySelector("input");if(i)i.focus();}};});
+
+/* ===== اکیلا / فیملی کسٹمر ===== */
+let cType="single";
+function setCType(t){cType=t;document.querySelectorAll("#ctype button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));}
+document.querySelectorAll("#ctype button").forEach(b=>{b.onclick=()=>setCType(b.dataset.t);});
+function applyType(){const single=curData.type==="single";$("mh").textContent=single?"ناپ (اکیلا کسٹمر)":"فیملی ممبرز";$("addM").hidden=single;$("toFam").hidden=!single;}
+$("toFam").onclick=()=>{setDoc(doc(col(),curId),{type:"family"},{merge:true}).catch(()=>{$("mst").textContent="تبدیل نہیں ہو سکا۔";});curData={...curData,type:"family"};applyType();};
+
+/* ===== ڈیزائن کے انتخاب: کالر، آستین، جیب ===== */
+const STY={
+  shirt:[["collar","کالر",["کالر","بین","شیروانی","گول گلا"]],["sleeve","آستین",["سادہ","کف والی","آدھی آستین"]],["fp","سامنے کی جیب",["نہیں","1","2"]],["sp","سائیڈ کی جیب",["نہیں","1","2"]]],
+  pant:[["pocket","جیب",["نہیں","1","2"]]],
+  vest:[["neck","گلا",["V گلا","گول گلا"]],["pocket","جیب",["نہیں","1","2","3"]]]
+};
+function buildOpts(){
+  for(const g in STY){
+    const wrap=document.createElement("div");wrap.className="opts";wrap.id="o_"+g;
+    STY[g].forEach(([k,l,vals])=>{
+      const r=document.createElement("div");r.className="orow";r.dataset.k=k;
+      const lb=document.createElement("label");lb.textContent=l;r.append(lb);
+      const cs=document.createElement("div");cs.className="ochips";
+      vals.forEach(v=>{const b=document.createElement("button");b.type="button";b.className="oc";b.textContent=v;b.dataset.v=v;
+        b.onclick=()=>{const on=b.classList.contains("sel");cs.querySelectorAll(".oc").forEach(x=>x.classList.remove("sel"));if(!on)b.classList.add("sel");};cs.append(b);});
+      r.append(cs);wrap.append(r);
+    });
+    $(g).after(wrap);
+  }
+}
+buildOpts();
+function getOpts(g){const o={};document.querySelectorAll("#o_"+g+" .orow").forEach(r=>{const x=r.querySelector(".oc.sel");if(x)o[r.dataset.k]=x.dataset.v;});return o;}
+function setOpts(op){for(const g in STY){document.querySelectorAll("#o_"+g+" .orow").forEach(r=>{const v=(op[g]||{})[r.dataset.k];r.querySelectorAll(".oc").forEach(b=>b.classList.toggle("sel",b.dataset.v===v));});}}
+const GN={shirt:"قمیض",pant:"شلوار",vest:"واسکٹ"};
+function dsg(x){const o=x.opts||{};return Object.keys(STY).map(g=>{const lab={};STY[g].forEach(([k,l])=>{lab[k]=l;});const p=Object.entries(o[g]||{}).map(([k,v])=>lab[k]+": "+v);return p.length?GN[g]+" ("+p.join("، ")+")":"";}).filter(Boolean).join(" | ");}
+
+/* ===== مستقل سیریل نمبر (ہر ٹیلر کا اپنا، 1001 سے شروع) ===== */
+const SERIAL_START=1001;
+async function nextSerial(){return runTransaction(db,async tx=>{const ref=doc(db,"users",uid,"meta","counter");const sn=await tx.get(ref);const n=sn.exists()?sn.data().next:SERIAL_START;tx.set(ref,{next:n+1});return n;});}
+async function getSerial(){if(!navigator.onLine)return null;try{return await Promise.race([nextSerial(),new Promise((_,rj)=>setTimeout(()=>rj(new Error("t")),5000))]);}catch(e){return null;}}
+let fixing=false;
+async function fixSerials(docs){
+  if(fixing||!navigator.onLine)return;
+  const miss=docs.filter(d=>!d.data().serial&&!d.metadata.hasPendingWrites&&d.data().createdAt).sort((a,b)=>a.data().createdAt.toMillis()-b.data().createdAt.toMillis());
+  if(!miss.length)return;fixing=true;
+  try{for(const d of miss){const n=await nextSerial();await setDoc(d.ref,{serial:n},{merge:true});}}catch(e){}
+  fixing=false;
+}
+function serialBadge(n){const d=document.createElement("div");d.className="av sb";d.textContent=n||"…";return d;}
+function personIcon(){const d=document.createElement("div");d.className="av pi";d.textContent="👤";return d;}
 </script>
 </body>
 </html>
