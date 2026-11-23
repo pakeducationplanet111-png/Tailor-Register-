@@ -14,8 +14,8 @@ if("serviceWorker" in navigator)addEventListener("load",function(){navigator.ser
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#1b2540;--tape:#f2b705;--bg:#eef2f8;--card:#fff;--line:#dde3ee;--mute:#5b6784;--bad:#d1431f;--p1:#2b3a8c;--p2:#0f9d8f;--phb:#dff5f1;--phc:#0a6f66;--adb:#e8ebfb;--adc:#2b3a8c;--rb:#f1e6f7;--rc:#6c2e8a;--sh:0 1px 4px rgba(27,37,64,.12)}
-@media (prefers-color-scheme:dark){:root{--ink:#eaf0ff;--bg:#0f1626;--card:#18223a;--line:#27345a;--mute:#9fb0d3;--bad:#ff8a70;--phb:#12413f;--phc:#7be8dc;--adb:#222d63;--adc:#aebcff;--rb:#3a2450;--rc:#e0b6f5;--sh:0 1px 4px rgba(0,0,0,.4)}}
+:root{--ink:#1b2540;--tape:#f2b705;--bg:#eef2f8;--card:#fff;--line:#dde3ee;--mute:#5b6784;--bad:#d1431f;--p1:#2b3a8c;--p2:#0f9d8f;--phb:#dff5f1;--phc:#0a6f66;--adb:#e8ebfb;--adc:#2b3a8c;--rb:#f1e6f7;--rc:#6c2e8a;--sh:0 1px 4px rgba(27,37,64,.12);--vb:#fbefd6;--vc:#8a5a00}
+@media (prefers-color-scheme:dark){:root{--ink:#eaf0ff;--bg:#0f1626;--card:#18223a;--line:#27345a;--mute:#9fb0d3;--bad:#ff8a70;--phb:#12413f;--phc:#7be8dc;--adb:#222d63;--adc:#aebcff;--rb:#3a2450;--rc:#e0b6f5;--sh:0 1px 4px rgba(0,0,0,.4);--vb:#4a3410;--vc:#ffd98a}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/2.1 "Jameel Noori Nastaleeq","Noto Nastaliq Urdu","Noto Naskh Arabic",Tahoma,serif}
 .tape{height:10px;background:repeating-linear-gradient(90deg,var(--tape) 0 14px,#1b2540 14px 16px)}
@@ -55,6 +55,19 @@ h2.hp{border-color:var(--p2)}
 h2.hm{border-color:var(--tape)}
 #dName{font-size:26px}
 #bk{margin-top:6px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:4px 0 8px}
+.tile{display:flex;flex-direction:column;align-items:center;padding:8px 4px 0;border-radius:14px;position:relative}
+.tile svg{width:42px;height:42px}
+.tile span{font-size:15px;line-height:2;color:var(--ink)}
+.tile[data-g=shirt]{color:var(--p1)}.tile[data-g=pant]{color:var(--p2)}.tile[data-g=vest]{color:#c27c0e}
+.tile.on{background:var(--adb);border-color:currentColor}
+.tile.has::after{content:"✓";position:absolute;top:0;inset-inline-start:8px;font-size:15px;line-height:1.8;color:#1a9d4a;font-weight:700}
+.g_shirt{background:var(--adb);color:var(--adc)}.g_pant{background:var(--phb);color:var(--phc)}.g_vest{background:var(--vb);color:var(--vc)}
+.seg{display:flex;gap:8px;margin:4px 0 12px}.seg button{flex:1}.seg button.on{background:var(--p1);color:#fff;border-color:var(--p1)}
+.opts{margin:6px 0 10px}.orow{margin-bottom:6px}.ochips{display:flex;flex-wrap:wrap;gap:6px}
+.oc{padding:0 12px;font-size:15px;line-height:2;border-radius:999px}.oc.sel{background:var(--p1);color:#fff;border-color:var(--p1)}
+#toFam{margin:4px 0 10px;color:var(--p1);border-color:var(--p1)}
+h2.hv{padding-inline-start:10px;border-inline-start:5px solid #c27c0e}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -98,8 +111,9 @@ setTimeout(function(){
     <header><button id="back">← واپس</button><button id="editC">معلومات بدلیں</button></header>
     <main>
       <h1 id="dName"></h1><p class="state" id="dInfo"></p>
-      <h2 class="hm">فیملی ممبرز</h2>
+      <h2 class="hm" id="mh">فیملی ممبرز</h2>
       <div class="state" id="mst"></div>
+      <button id="toFam" hidden>+ فیملی کے دوسرے افراد بھی شامل کریں</button>
       <div id="mlist"></div>
     </main>
     <button class="main fab" id="addM">نیا ممبر</button>
@@ -108,6 +122,7 @@ setTimeout(function(){
 
 <dialog id="dlg">
   <h1 id="dTitle">نیا کسٹمر</h1>
+  <div id="ctypeWrap"><label>کسٹمر کی قسم</label><div class="seg" id="ctype"><button type="button" data-t="single" class="on">ایک فرد (اکیلا)</button><button type="button" data-t="family">فیملی (کئی افراد)</button></div></div>
   <label for="fn">نام</label><input id="fn" autocomplete="off">
   <label for="fp">فون نمبر</label><input id="fp" type="tel" dir="ltr" autocomplete="off">
   <label for="fa">ایڈریس</label><textarea id="fa" rows="3"></textarea>
@@ -123,8 +138,16 @@ setTimeout(function(){
   <h1 id="mTitle">نیا ممبر</h1>
   <label for="mn">نام</label><input id="mn" autocomplete="off">
   <label for="mr">رشتہ (مثلاً بیٹا، بھائی)</label><input id="mr" autocomplete="off">
-  <h2 class="hs">قمیض کی ناپ (انچ)</h2><div class="grid" id="shirt"></div>
-  <h2 class="hp">شلوار کی ناپ (انچ)</h2><div class="grid" id="pant"></div>
+  <h2 class="hm">کپڑے کی ناپ (آئیکن پر ٹیپ کریں)</h2>
+  <div class="tiles">
+    <button type="button" class="tile" data-g="shirt"><svg viewBox="0 0 48 48" fill="currentColor"><path d="M16 5 8 11 3 22l7 3 3-5v22h22V20l3 5 7-3-5-11-8-6c-2 5-14 5-16 0z"/></svg><span>قمیض</span></button>
+    <button type="button" class="tile" data-g="pant"><svg viewBox="0 0 48 48" fill="currentColor"><path d="M12 5h24l3 38H27l-3-21-3 21H9z"/></svg><span>شلوار</span></button>
+    <button type="button" class="tile" data-g="vest"><svg viewBox="0 0 48 48" fill="currentColor"><path d="M13 4l9 2 2 12 2-12 9-2 3 9v29H10V13z"/><circle cx="24" cy="26" r="1.8" fill="#fff"/><circle cx="24" cy="32" r="1.8" fill="#fff"/><circle cx="24" cy="38" r="1.8" fill="#fff"/></svg><span>واسکٹ</span></button>
+  </div>
+  <section class="gsec" id="g_shirt" hidden><h2 class="hs">قمیض کی ناپ (انچ)</h2><div class="grid" id="shirt"></div></section>
+  <section class="gsec" id="g_pant" hidden><h2 class="hp">شلوار کی ناپ (انچ)</h2><div class="grid" id="pant"></div></section>
+  <section class="gsec" id="g_vest" hidden><h2 class="hv">واسکٹ کی ناپ (انچ)</h2><div class="grid" id="vest"></div>
+    <label for="vnote">واسکٹ کا ڈیزائن / نوٹس</label><textarea id="vnote" rows="2"></textarea></section>
   <label for="mnote">نوٹس</label><textarea id="mnote" rows="2"></textarea>
   <div class="err" id="me" role="alert"></div>
   <div class="btns">
@@ -243,7 +266,7 @@ function openForm(id){
   const c = id ? (items.get(id) || (id === curId ? curData : {})) : {};
   $("dTitle").textContent = id ? "کسٹمر کی معلومات" : "نیا کسٹمر";
   $("fn").value = c.name || ""; $("fp").value = c.phone || ""; $("fa").value = c.address || "";
-  $("rm").hidden = !id; $("fe").textContent = "";
+  $("rm").hidden = !id; $("fe").textContent = ""; setCType(id ? (c.type || "family") : "single"); $("ctypeWrap").hidden = !!id;
   $("dlg").showModal(); $("fn").focus();
 }
 $("add").onclick = () => openForm();
@@ -252,12 +275,12 @@ $("save").onclick = async () => {
   const name = $("fn").value.trim();
   if (!name) { $("fe").textContent = "نام لکھنا ضروری ہے۔"; return; }
   const data = {name, phone: $("fp").value.trim(), address: $("fa").value.trim()};
-  if (editId && editId === curId) { curData = data; showHead(data); }
+  if (editId && editId === curId) { curData = {...curData, ...data}; showHead(curData); }
   $("dlg").close();
   /* آف لائن ہو تو بھی محفوظ ہو جاتا ہے اور انٹرنیٹ آنے پر خود سنک ہوتا ہے */
   try {
     if (editId) await setDoc(doc(col(), editId), data, {merge: true});
-    else await addDoc(col(), {...data, createdAt: serverTimestamp()});
+    else { const ref = doc(col()); const ops = [setDoc(ref, {...data, type: cType, createdAt: serverTimestamp()})]; if (cType === "single") ops.push(setDoc(doc(collection(db, "users", uid, "customers", ref.id, "members")), {name, relation: "خود", createdAt: serverTimestamp()})); await Promise.all(ops); }
   } catch (e) { $("st").textContent = "محفوظ نہیں ہو سکا۔ دوبارہ کوشش کریں۔"; }
 };
 $("rm").onclick = async () => {
@@ -271,13 +294,14 @@ $("rm").onclick = async () => {
 /* ===== مرحلہ 3: فیملی ممبرز اور ناپ ===== */
 const SHIRT=[["len","لمبائی"],["chest","چھاتی"],["waist","کمر"],["hem","گھیرا"],["shoulder","کندھا"],["sleeve","آستین"],["neck","گلا"]];
 const PANT=[["len","لمبائی"],["bottom","پائنچہ"],["hem","گھیرا"],["waist","کمر"]];
+const VEST=[["len","لمبائی"],["chest","چھاتی"],["waist","کمر"],["hem","گھیرا"],["shoulder","کندھا"],["neck","گلا"],["armhole","بغل"]];
 function buildGrid(el,arr,p){arr.forEach(([k,l])=>{const w=document.createElement("div"),lb=document.createElement("label"),i=document.createElement("input");lb.textContent=l;lb.htmlFor=p+k;i.id=p+k;i.setAttribute("inputmode","decimal");i.dir="ltr";i.autocomplete="off";w.append(lb,i);el.append(w);});}
-buildGrid($("shirt"),SHIRT,"s_");buildGrid($("pant"),PANT,"p_");
+buildGrid($("shirt"),SHIRT,"s_");buildGrid($("pant"),PANT,"p_");buildGrid($("vest"),VEST,"v_");
 const mcol=()=>collection(db,"users",uid,"customers",curId,"members");
 function showHead(c){$("dName").textContent=c.name||"";const i=$("dInfo");i.innerHTML="";i.className="chips";if(c.phone){const p=document.createElement("a");p.className="ph";p.href="tel:"+c.phone;p.textContent="📞 "+c.phone;i.append(p);}if(c.address){const a=document.createElement("em");a.className="ad";a.textContent="📍 "+c.address;i.append(a);}}
 function closeDetail(){if(munsub){munsub();munsub=null;}curId=null;mItems.clear();$("detailView").hidden=true;$("listView").hidden=false;}
 function openDetail(id){
-  curId=id;curData=items.get(id)||{};showHead(curData);
+  curId=id;curData=items.get(id)||{};showHead(curData);applyType();
   $("listView").hidden=true;$("detailView").hidden=false;window.scrollTo(0,0);
   if(munsub)munsub();
   munsub=onSnapshot(query(mcol(),orderBy("createdAt")),snap=>{
@@ -285,7 +309,7 @@ function openDetail(id){
     snap.forEach(d=>{const m=d.data();mItems.set(d.id,m);
       const r=document.createElement("div");r.className="row";r.tabIndex=0;
       const b=document.createElement("b");b.textContent=m.name||"(بغیر نام)";
-      const s=document.createElement("span");s.className="chips";if(m.relation){const q=document.createElement("em");q.className="rel";q.textContent=m.relation;s.append(q);}
+      const s=document.createElement("span");s.className="chips";if(m.relation){const q=document.createElement("em");q.className="rel";q.textContent=m.relation;s.append(q);}[["shirt","قمیض"],["pant","شلوار"],["vest","واسکٹ"]].forEach(([g,l])=>{if(m[g]&&Object.keys(m[g]).length){const z=document.createElement("em");z.className="g_"+g;z.textContent="✓ "+l;s.append(z);}});
       const tx=document.createElement("div");tx.className="tx";tx.append(b,s);r.append(avatar(m.name),tx);r.onclick=()=>openM(d.id);r.onkeydown=e=>{if(e.key==="Enter")openM(d.id);};l.append(r);});
     $("mst").textContent=snap.size?"":"ابھی کوئی ممبر نہیں۔ \"نیا ممبر\" دبا کر شامل کریں۔";
   },()=>{$("mst").textContent="ممبرز نہیں کھل سکے۔ انٹرنیٹ چیک کریں۔";});
@@ -298,6 +322,7 @@ function openM(id){
   $("mn").value=m.name||"";$("mr").value=m.relation||"";$("mnote").value=m.note||"";
   SHIRT.forEach(([k])=>$("s_"+k).value=(m.shirt||{})[k]||"");
   PANT.forEach(([k])=>$("p_"+k).value=(m.pant||{})[k]||"");
+  VEST.forEach(([k])=>$("v_"+k).value=(m.vest||{})[k]||"");$("vnote").value=m.vestNote||"";openTiles(m);
   $("mrm").hidden=!id;$("me").textContent="";$("mdlg").showModal();$("mn").focus();
 }
 $("addM").onclick=()=>openM();
@@ -306,7 +331,7 @@ $("msave").onclick=async()=>{
   const name=$("mn").value.trim();
   if(!name){$("me").textContent="نام لکھنا ضروری ہے۔";return;}
   const g=(a,p)=>Object.fromEntries(a.map(([k])=>[k,$(p+k).value.trim()]).filter(([,v])=>v));
-  const data={name,relation:$("mr").value.trim(),shirt:g(SHIRT,"s_"),pant:g(PANT,"p_"),note:$("mnote").value.trim()};
+  const data={name,relation:$("mr").value.trim(),shirt:g(SHIRT,"s_"),pant:g(PANT,"p_"),vest:g(VEST,"v_"),opts:{shirt:getOpts("shirt"),pant:getOpts("pant"),vest:getOpts("vest")},vestNote:$("vnote").value.trim(),note:$("mnote").value.trim()};
   $("mdlg").close();
   try{
     if(mEdit)await setDoc(doc(mcol(),mEdit),{...data,createdAt:(mItems.get(mEdit)||{}).createdAt||serverTimestamp()});
@@ -331,12 +356,12 @@ $("bk").onclick = async () => {
       const ms = await Promise.all(part.map(c => getDocs(collection(db, "users", uid, "customers", c.id, "members"))));
       part.forEach((c, j) => {
         const cd = c.data(), mm = ms[j].docs, base = [cd.name, cd.phone, cd.address];
-        if (!mm.length) rows.push([...base, "", "", ...SHIRT.map(() => ""), ...PANT.map(() => ""), ""]);
-        mm.forEach(m => { const x = m.data(); rows.push([...base, x.name, x.relation, ...SHIRT.map(([k]) => (x.shirt || {})[k] || ""), ...PANT.map(([k]) => (x.pant || {})[k] || ""), x.note || ""]); });
+        if (!mm.length) rows.push([...base, "", "", ...SHIRT.map(() => ""), ...PANT.map(() => ""), ...VEST.map(() => ""), "", "", ""]);
+        mm.forEach(m => { const x = m.data(); rows.push([...base, x.name, x.relation, ...SHIRT.map(([k]) => (x.shirt || {})[k] || ""), ...PANT.map(([k]) => (x.pant || {})[k] || ""), ...VEST.map(([k]) => (x.vest || {})[k] || ""), x.vestNote || "", dsg(x), x.note || ""]); });
       });
       done += part.length; st.textContent = done + " / " + docs.length + " کسٹمرز…";
     }
-    const head = ["کسٹمر", "فون", "ایڈریس", "ممبر", "رشتہ", ...SHIRT.map(([, l]) => "قمیض " + l), ...PANT.map(([, l]) => "شلوار " + l), "نوٹس"];
+    const head = ["کسٹمر", "فون", "ایڈریس", "ممبر", "رشتہ", ...SHIRT.map(([, l]) => "قمیض " + l), ...PANT.map(([, l]) => "شلوار " + l), ...VEST.map(([, l]) => "واسکٹ " + l), "واسکٹ نوٹس", "ڈیزائن", "نوٹس"];
     const esc = v => '"' + String(v ?? "").replace(/"/g, '""') + '"';
     const csv = "\ufeff" + [head, ...rows].map(r => r.map(esc).join(",")).join("\r\n");
     const a = document.createElement("a");
@@ -351,6 +376,43 @@ $("bk").onclick = async () => {
 /* ===== رنگین اوتار (Avatar) ===== */
 const AV=["#2b3a8c","#0f9d8f","#d1431f","#8e44ad","#c27c0e","#1f78b4"];
 function avatar(n){const d=document.createElement("div");d.className="av";const t=(n||"?").trim();d.textContent=([...t][0]||"?").toUpperCase();let h=0;for(const ch of t)h=(h*31+ch.codePointAt(0))%997;d.style.background=AV[h%AV.length];return d;}
+
+/* ===== قمیض / شلوار / واسکٹ کے آئیکن ===== */
+function openTiles(m){setOpts(m.opts||{});["shirt","pant","vest"].forEach(g=>{const has=Object.keys(m[g]||{}).length>0||Object.keys((m.opts||{})[g]||{}).length>0;$("g_"+g).hidden=!has;const t=document.querySelector('.tile[data-g="'+g+'"]');t.classList.toggle("on",has);t.classList.toggle("has",has);});}
+document.querySelectorAll(".tile").forEach(t=>{t.onclick=()=>{const sec=$("g_"+t.dataset.g);sec.hidden=!sec.hidden;t.classList.toggle("on",!sec.hidden);if(!sec.hidden){const i=sec.querySelector("input");if(i)i.focus();}};});
+
+/* ===== اکیلا / فیملی کسٹمر ===== */
+let cType="single";
+function setCType(t){cType=t;document.querySelectorAll("#ctype button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));}
+document.querySelectorAll("#ctype button").forEach(b=>{b.onclick=()=>setCType(b.dataset.t);});
+function applyType(){const single=curData.type==="single";$("mh").textContent=single?"ناپ (اکیلا کسٹمر)":"فیملی ممبرز";$("addM").hidden=single;$("toFam").hidden=!single;}
+$("toFam").onclick=()=>{setDoc(doc(col(),curId),{type:"family"},{merge:true}).catch(()=>{$("mst").textContent="تبدیل نہیں ہو سکا۔";});curData={...curData,type:"family"};applyType();};
+
+/* ===== ڈیزائن کے انتخاب: کالر، آستین، جیب ===== */
+const STY={
+  shirt:[["collar","کالر",["کالر","بین","شیروانی","گول گلا"]],["sleeve","آستین",["سادہ","کف والی","آدھی آستین"]],["fp","سامنے کی جیب",["نہیں","1","2"]],["sp","سائیڈ کی جیب",["نہیں","1","2"]]],
+  pant:[["pocket","جیب",["نہیں","1","2"]]],
+  vest:[["neck","گلا",["V گلا","گول گلا"]],["pocket","جیب",["نہیں","1","2","3"]]]
+};
+function buildOpts(){
+  for(const g in STY){
+    const wrap=document.createElement("div");wrap.className="opts";wrap.id="o_"+g;
+    STY[g].forEach(([k,l,vals])=>{
+      const r=document.createElement("div");r.className="orow";r.dataset.k=k;
+      const lb=document.createElement("label");lb.textContent=l;r.append(lb);
+      const cs=document.createElement("div");cs.className="ochips";
+      vals.forEach(v=>{const b=document.createElement("button");b.type="button";b.className="oc";b.textContent=v;b.dataset.v=v;
+        b.onclick=()=>{const on=b.classList.contains("sel");cs.querySelectorAll(".oc").forEach(x=>x.classList.remove("sel"));if(!on)b.classList.add("sel");};cs.append(b);});
+      r.append(cs);wrap.append(r);
+    });
+    $(g).after(wrap);
+  }
+}
+buildOpts();
+function getOpts(g){const o={};document.querySelectorAll("#o_"+g+" .orow").forEach(r=>{const x=r.querySelector(".oc.sel");if(x)o[r.dataset.k]=x.dataset.v;});return o;}
+function setOpts(op){for(const g in STY){document.querySelectorAll("#o_"+g+" .orow").forEach(r=>{const v=(op[g]||{})[r.dataset.k];r.querySelectorAll(".oc").forEach(b=>b.classList.toggle("sel",b.dataset.v===v));});}}
+const GN={shirt:"قمیض",pant:"شلوار",vest:"واسکٹ"};
+function dsg(x){const o=x.opts||{};return Object.keys(STY).map(g=>{const lab={};STY[g].forEach(([k,l])=>{lab[k]=l;});const p=Object.entries(o[g]||{}).map(([k,v])=>lab[k]+": "+v);return p.length?GN[g]+" ("+p.join("، ")+")":"";}).filter(Boolean).join(" | ");}
 </script>
 </body>
 </html>
